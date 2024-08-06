@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather and Location Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .weather-info, .location-info {
+            margin: 20px 0;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Weather and Location Information</h1>
+    </header>
+    <div class="container">
+        <div class="weather-info">
+            <h2>Current Weather</h2>
+            <table>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Current Temperature</td>
+                    <td id="temp">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Feels Like</td>
+                    <td id="feels_like">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Maximum Temperature</td>
+                    <td id="max_temp">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Minimum Temperature</td>
+                    <td id="min_temp">Loading...</td>
+                </tr>
+            </table>
+        </div>    
+        <div class="location-info">
+            <h2>Your Location Information</h2>
+            <table>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Your IP</td>
+                    <td id="ip">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Your City</td>
+                    <td id="city">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Your Region</td>
+                    <td id="region">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Your Country</td>
+                    <td id="country">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Your Location</td>
+                    <td id="loc">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Your Wifi</td>
+                    <td id="org">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Your Postal</td>
+                    <td id="postal">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Your Time Zone</td>
+                    <td id="timezone">Loading...</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Fetch location data
+        fetch('https://ipinfo.io/json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ip').textContent = data.ip;
+                document.getElementById('city').textContent = data.city;
+                document.getElementById('region').textContent = data.region;
+                document.getElementById('country').textContent = data.country;
+                document.getElementById('loc').textContent = data.loc;
+                document.getElementById('org').textContent = data.org;
+                document.getElementById('postal').textContent = data.postal;
+                document.getElementById('timezone').textContent = data.timezone;
+
+                // Fetch weather data
+                const apiKey = '98943b1b4b2021db6e7a9f14cb07059b';
+                const cityName = data.city;
+                fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`)
+                    .then(response => response.json())
+                    .then(weatherData => {
+                        const kelvinToCelsius = kelvin => kelvin - 273.15;
+                        document.getElementById('temp').textContent = kelvinToCelsius(weatherData.main.temp).toFixed(2) + '°C';
+                        document.getElementById('feels_like').textContent = kelvinToCelsius(weatherData.main.feels_like).toFixed(2) + '°C';
+                        document.getElementById('max_temp').textContent = kelvinToCelsius(weatherData.main.temp_max).toFixed(2) + '°C';
+                        document.getElementById('min_temp').textContent = kelvinToCelsius(weatherData.main.temp_min).toFixed(2) + '°C';
+                    });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>
