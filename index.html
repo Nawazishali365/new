@@ -48,13 +48,6 @@
     </style>
 </head>
 <body>
-    <script>
-        window.onload = function() {
-            if (!confirm("This website will access your location. Do you want to allow it?")) {
-                alert("You denied access to location. The information might not be accurate.");
-            }
-        }
-    </script>
     <header>
         <h1>Weather and Location Information</h1>
     </header>
@@ -128,6 +121,11 @@
     </div>
 
     <script>
+        window.onload = function() {
+            if (!confirm("This website will access your location. Do you want to allow it?")) {
+                alert("You denied access to location. The information might not be accurate.");
+            }
+        }
         // Fetch location data
         fetch('https://ipinfo.io/json')
             .then(response => response.json())
